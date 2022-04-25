@@ -42,13 +42,13 @@ const char *password = APPSK;
 
 
 void stopMotors() {
+ 
   direction = 0;
   dutyCycleA = 0;
   dutyCycleB = 0;
+  
   digitalWrite(in1A, LOW);
   digitalWrite(in1B, LOW);
-  analogWrite(pwmA, dutyCycleA);
-  analogWrite(pwmB, dutyCycleB);
 }
 
 void setForward() {
@@ -138,9 +138,11 @@ void loop(){
               if(dutyCycleB > 10) 
                 dutyCycleB -= 10;
             } else if (header.indexOf("GET /LE") >= 0) {
+              Serial.println(direction);
               dutyCycleB = 185; 
               dutyCycleA = 225;
             } else if (header.indexOf("GET /RI") >= 0) {
+              Serial.println(direction);
               dutyCycleB = 225; 
               dutyCycleA = 185;
             } else if (header.indexOf("GET /BA") >= 0) {
@@ -161,6 +163,7 @@ void loop(){
             client.println(".button2 {background-color: #77878A;}</style></head>");
             
             // Web Page Heading
+            
             String valueString = "<tr><td><center>" + String(dutyCycleA) + "</center></td><td> &nbsp; </td><td><center>" + String(dutyCycleB) + "</center></td></tr>";
             client.println("<body><h1>ESP8266 Web Server</h1>");
             client.println("<center><table>");
@@ -189,7 +192,6 @@ void loop(){
     Serial.println("Client disconnected.");
     Serial.println("");
   }
-  
   if (direction == 0 ) {
     analogWrite(pwmA, dutyCycleA);
     analogWrite(pwmB, dutyCycleB);
